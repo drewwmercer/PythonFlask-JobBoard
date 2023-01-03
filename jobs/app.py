@@ -1,7 +1,46 @@
-from flask import Flask, render_template
+from multiprocessing import connection
+from flask import Flask, g, render_template
+import sqlite3
+
+PATH = "db/jobs.sqlite"
 
 # create and configure the app
 app = Flask(__name__)
+
+
+def open_connection():
+    connection = getattr(g, '_connection', None)
+
+    if connection == None:
+        connection = sqlite3.connect(PATH)
+        g._connection = sqlite3.connect(PATH)
+
+    connection.row_factory = sqlite3.Row
+
+    return connection
+
+
+def execute_sql(sql, values, commit, single):
+    connection = open_connection()
+    
+    values = ()
+    commit = False
+    single = False
+    
+    cursor = connection.execute(sql, values)
+    
+    if commit == True:
+        results = connection.commit()
+    else:
+        
+    return results
+
+def close_connection(exception):
+    connection = getattr(g, '_connection', None)
+    
+    if connection != None:
+        connection.close()
+        @app.teardown_appcontext
 
 
 @app.route('/')
