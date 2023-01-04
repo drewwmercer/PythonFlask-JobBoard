@@ -5,7 +5,6 @@ from xml.dom.minicompat import EmptyNodeList
 from flask import Flask, g, render_template, redirect, request, url_for
 import sqlite3
 import datetime
-import _tkinter
 
 PATH = "db/jobs.sqlite"
 
